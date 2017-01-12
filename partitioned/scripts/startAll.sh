@@ -37,7 +37,7 @@ do
 done
 
 # create a region using GFSH
-gfsh -e "connect --locator=localhost[${GEODE_LOCATOR_PORT}]" -e "create region --name=myRegion --type=PARTITION"
+gfsh -e "connect --locator=localhost[${GEODE_LOCATOR_PORT}]" -e "create region --name=EmployeeRegion --type=PARTITION"
 
 gfsh -e "connect --locator=localhost[${GEODE_LOCATOR_PORT}]" -e "list members"
 

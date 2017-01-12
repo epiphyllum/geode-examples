@@ -16,39 +16,49 @@
  */
 package org.apache.geode.examples.partitioned;
 
-import java.util.*;
+import java.util.logging.Logger;
 import org.apache.geode.cache.client.ClientCache;
 
-public class Consumer extends BaseClient {
+public class EmployeeKey {
 
-  public static void main(String[] args) {
-    Consumer c = new Consumer();
-    int numEntries = c.countEntriesOnServer();
-    c.printRegionContents();
+  static final Logger logger = Logger.getAnonymousLogger();
+  private String name;
+  private int emplNumber;
+
+  public EmployeeKey() {
   }
 
-  public Consumer() {
+  public EmployeeKey(String n, int en) {
+    this.name = n;
+    this.emplNumber = en;
   }
 
-  public Consumer(ClientCache clientCache) {
-    this.clientCache = clientCache;
+  public String getName() {
+    return(name);
   }
 
-  public int countEntriesOnServer() {
-    int size = this.getRegion().keySetOnServer().size();
-    logger.info(String.format("Done. %d entries available on the server(s).", size));
-    return size;
+  public int getEmplNumber() {
+    return(emplNumber);
   }
 
-  public void printRegionContents() {
-    Set<EmployeeKey> setOfKeys = this.getRegion().keySetOnServer();
-    /* for each key in setOfKeys
-     *   print the entry
-     */
-    logger.info("Region contents:");
-    for (EmployeeKey key : setOfKeys) {
-      logger.info(getRegion().getEntry(key).toString());
+  public boolean equals(EmployeeKey key) {
+    if ( this.name.equals(key.getName()) && 
+        this.emplNumber==key.getEmplNumber() ) {
+      return true;
     }
+    return false;
+  }
+
+  public int hashCode() {
+    int nameHashValue = this.name.hashCode();
+    int numHashValue = this.emplNumber;
+    logger.info("Key: name hash=" + nameHashValue + " num hash=" +
+      numHashValue);
+    return(nameHashValue + numHashValue);
+  }
+
+  public String toString() {
+    return("Name: " + this.name + " Employee Number: " + this.emplNumber);
   }
 
 }
