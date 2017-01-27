@@ -17,6 +17,7 @@
 package org.apache.geode.examples.partitioned;
 
 import org.apache.geode.cache.client.ClientCache;
+import org.apache.geode.cache.client.ServerOperationException;
 
 public class Producer extends BaseClient {
 
@@ -36,7 +37,12 @@ public class Producer extends BaseClient {
     EmployeeKey k1 = new EmployeeKey("Alex Able", 160);
     EmployeeData d1 = new EmployeeData(k1, 70000, 40);
     logger.info("About to try put on k1,d1 ");
-    getRegion().put(k1, d1);
+    try {
+      getRegion().put(k1, d1);
+    } catch (ServerOperationException e) {
+      logger.info("ServerOperationException " + e.getMessage());
+      logger.info("ServerOperationException " + e.getCause());
+    }
 
     EmployeeKey k2 = new EmployeeKey("Bertie Bell", 170);
     EmployeeData d2 = new EmployeeData(k2, 72000, 40);

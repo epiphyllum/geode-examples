@@ -17,9 +17,10 @@
 package org.apache.geode.examples.partitioned;
 
 import java.util.logging.Logger;
+import java.io.Serializable;
 import org.apache.geode.cache.client.ClientCache;
 
-public class EmployeeKey {
+public class EmployeeKey implements Serializable {
 
   static final Logger logger = Logger.getAnonymousLogger();
   private String name;

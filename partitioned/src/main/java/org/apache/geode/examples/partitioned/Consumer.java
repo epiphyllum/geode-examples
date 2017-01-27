@@ -45,9 +45,12 @@ public class Consumer extends BaseClient {
     /* for each key in setOfKeys
      *   print the entry
      */
+    if (setOfKeys.equals(null)) {
+       logger.info("setOfKeys is a null reference");
+    }
     logger.info("Region contents:");
     for (EmployeeKey key : setOfKeys) {
-      logger.info(getRegion().getEntry(key).toString());
+      logger.info(this.getRegion().getEntry(key).toString());
     }
   }
 

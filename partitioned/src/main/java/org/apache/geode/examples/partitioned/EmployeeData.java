@@ -17,8 +17,9 @@
 package org.apache.geode.examples.partitioned;
 
 import java.util.logging.Logger;
+import java.io.Serializable;
 
-public class EmployeeData {
+public class EmployeeData implements Serializable {
 
   static final Logger logger = Logger.getAnonymousLogger();
   private EmployeeKey nameAndNumber;
@@ -26,9 +27,6 @@ public class EmployeeData {
   private int hoursPerWeek;
 
   public EmployeeData() {
-    this.nameAndNumber = new EmployeeKey("no name", 0);
-    this.salary = 0;
-    this.hoursPerWeek = 0;
   }
 
   public EmployeeData(EmployeeKey k, int s, int hrs) {
@@ -50,7 +48,7 @@ public class EmployeeData {
   }
 
   public String toString() {
-    return(nameAndNumber.toString() + " salary=" + this.salary +
+    return(this.nameAndNumber.toString() + " salary=" + this.salary +
      " hoursPerWeek=" + this.hoursPerWeek);
   }
 

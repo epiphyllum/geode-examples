@@ -15,6 +15,12 @@ as well how to write tests using mocks for Geode applications.
 
 ## Steps
 1. From the ```geode-examples/partitioned``` directory,
+build the jar (with the EmployeeKey and EmployeeData classes),
+which is put onto the classpath when starting the servers:
+
+        $   ../gradlew -x rat build -x spotLessCheck -x test
+
+1. From the ```geode-examples/partitioned``` directory,
 run a script that starts a locator and two servers:
 
         $ scripts/startAll.sh

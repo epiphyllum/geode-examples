@@ -33,7 +33,7 @@ gfsh start locator --name=locator1 --mcast-port=0 --port=${GEODE_LOCATOR_PORT}
 # start 2 servers on a random available port
 for N in {1..2}
 do
- gfsh start server --locators=localhost[${GEODE_LOCATOR_PORT}] --name=server$N  --server-port=0 --mcast-port=0
+ gfsh start server --locators=localhost[${GEODE_LOCATOR_PORT}] --name=server$N  --server-port=0 --mcast-port=0 --classpath=${PWD}/build/libs/partitioned.jar
 done
 
 # create a region using GFSH
