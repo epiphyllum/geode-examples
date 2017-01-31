@@ -53,11 +53,8 @@ public class EmployeeData implements Serializable {
   }
 
   public String toString() {
-    return ("bogus EmployeeData string");
-    /*
-     * return (this.nameAndNumber.toString() + " salary=" + this.salary + " hoursPerWeek=" +
-     * this.hoursPerWeek);
-     */
+    return (this.nameAndNumber.toString() + " salary=" + this.salary + " hoursPerWeek="
+        + this.hoursPerWeek);
   }
 
 }

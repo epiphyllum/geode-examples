@@ -47,7 +47,7 @@ public class Consumer extends BaseClient {
     }
     logger.info("Region contents:");
     for (EmployeeKey key : setOfKeys) {
-      if (this.getRegion().getEntry(key) == null ) {
+      if (this.getRegion().getEntry(key) == null) {
         logger.info("getEntry returned null");
       }
       logger.info(this.getRegion().getEntry(key).toString());
