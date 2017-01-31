@@ -1,3 +1,20 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
 # Geode partitioned region example
 
 This basic example demonstrates the properties of a partitioned region. 
@@ -18,23 +35,34 @@ as well how to write tests using mocks for Geode applications.
 build the jar (with the EmployeeKey and EmployeeData classes),
 which is put onto the classpath when starting the servers:
 
-        $   ../gradlew -x rat build -x spotLessCheck -x test
+        $   ../gradlew build
 
 1. From the ```geode-examples/partitioned``` directory,
 run a script that starts a locator and two servers:
 
         $ scripts/startAll.sh
 
-    Each of the servers hosts the partitioned region called ```myRegion```.
+    Each of the servers hosts the partitioned region called ```EmployeeRegion```.
 
-2. Run the producer to put 50 entries into ```myRegion```:
+2. Run the producer to put 50 entries into ```EmployeeRegion```:
 
         $ ../gradlew run -Pmain=Producer
         ...
         ... 
         INFO: Done. Inserted 50 entries.
 
-3. Run the consumer to observe that there are 50 entries in ```myRegion```:
+    To see contents of the region keys, use a ```gfsh``` query:
+ 
+        $ $GEODE_HOME/bin/gfsh
+        ...
+        gfsh>connect
+        gfsh>query --query="select e.key from /EmployeeRegion.entries e"
+
+    or, to see contents of the region values, use a ```gfsh``` query:
+
+        gfsh>query --query="select * from /EmployeeRegion"
+
+3. Run the consumer to observe that there are 50 entries in ```EmployeeRegion```:
 
         $ ../gradlew run -Pmain=Consumer
         ...
@@ -46,9 +74,9 @@ run a script that starts a locator and two servers:
         $ $GEODE_HOME/bin/gfsh
         ...
         gfsh>connect
-        gfsh>describe region --name=myRegion
+        gfsh>describe region --name=EmployeeRegion
         ..........................................................
-        Name            : myRegion
+        Name            : EmployeeRegion
         Data Policy     : partition
         Hosting Members : server2
                           server1
@@ -83,9 +111,9 @@ the entries are still available:
         $ $GEODE_HOME/bin/gfsh
         ...
         gfsh>connect
-        gfsh>describe region --name=myRegion
+        gfsh>describe region --name=EmployeeRegion
         ..........................................................
-        Name            : myRegion
+        Name            : EmployeeRegion
         Data Policy     : partition
         Hosting Members : server2
 
