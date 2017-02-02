@@ -14,11 +14,14 @@
  */
 package org.apache.geode.examples.partitioned;
 
+import java.util.Objects;
 import java.util.logging.Logger;
 import java.io.Serializable;
 import org.apache.geode.cache.client.ClientCache;
 
 public class BadEmployeeKey implements Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   static final Logger logger = Logger.getAnonymousLogger();
   private String name;
@@ -39,22 +42,33 @@ public class BadEmployeeKey implements Serializable {
     return (emplNumber);
   }
 
-  public boolean equals(EmployeeKey key) {
-    if (this.name.equals(key.getName()) && this.emplNumber == key.getEmplNumber()) {
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
       return true;
     }
-    return false;
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    BadEmployeeKey that = (BadEmployeeKey) o;
+
+    if (emplNumber != that.emplNumber) {
+      return false;
+    }
+    return name.equals(that.name);
   }
 
   /*
    * This hashCode is what make this class a very poor implementation. It always returns the value
-   * 1, so that every key gets placed in the same bucket, and partitioning is useless.
-   * 
+   * 1, so that every entry gets placed in the same bucket, and partitioning is useless.
+   *
    * Forgetting to define, or implementing an erroneous hashCode can result in rotten distribution
-   * of region entries across buckets.
+   * of region entries across buckets (and therefore, across partitions).
    */
+  @Override
   public int hashCode() {
-    return (1);
+    return 1;
   }
 
   public String toString() {
