@@ -60,7 +60,7 @@ public class BadEmployeeKey implements Serializable {
   }
 
   /*
-   * This hashCode is what make this class a very poor implementation. It always returns the value
+   * This hashCode is what makes this class a very poor implementation. It always returns the value
    * 1, so that every entry gets placed in the same bucket, and partitioning is useless.
    *
    * Forgetting to define, or implementing an erroneous hashCode can result in rotten distribution
