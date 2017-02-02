@@ -16,12 +16,14 @@ package org.apache.geode.examples.partitioned;
 
 import java.util.*;
 import org.apache.geode.cache.client.ClientCache;
+import org.apache.geode.cache.Region;
 
 public class Consumer extends BaseClient {
 
   public static void main(String[] args) {
     Consumer c = new Consumer();
     int numEntries = c.countEntriesOnServer();
+    logger.info(String.format("%d entries in the region on the server(s).", numEntries));
     c.printRegionContents();
   }
 
@@ -33,24 +35,18 @@ public class Consumer extends BaseClient {
 
   public int countEntriesOnServer() {
     int size = this.getRegion().keySetOnServer().size();
-    logger.info(String.format("Done. %d entries available on the server(s).", size));
     return size;
   }
 
   public void printRegionContents() {
-    Set<EmployeeKey> setOfKeys = this.getRegion().keySetOnServer();
+    Region myRegion = this.getRegion();
+    Set<EmployeeKey> setOfKeys = myRegion.keySetOnServer();
     /*
      * for each key in setOfKeys print the entry
      */
-    if (setOfKeys == null) {
-      logger.info("setOfKeys is a null reference");
-    }
     logger.info("Region contents:");
     for (EmployeeKey key : setOfKeys) {
-      if (this.getRegion().getEntry(key) == null) {
-        logger.info("getEntry returned null");
-      }
-      logger.info(this.getRegion().getEntry(key).toString());
+      logger.info(myRegion.get(key).toString());
     }
   }
 

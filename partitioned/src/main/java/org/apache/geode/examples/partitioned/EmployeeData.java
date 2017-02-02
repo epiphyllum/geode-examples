@@ -19,6 +19,8 @@ import java.io.Serializable;
 
 public class EmployeeData implements Serializable {
 
+  private static final long serialVersionUID = 1L;
+
   static final Logger logger = Logger.getAnonymousLogger();
   private EmployeeKey nameAndNumber;
   private int salary;

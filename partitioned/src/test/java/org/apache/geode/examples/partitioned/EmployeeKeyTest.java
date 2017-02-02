@@ -55,11 +55,6 @@ public class EmployeeKeyTest {
   }
 
   @Test
-  public void testHashCode() {
-    assertEquals(1773287935, k.hashCode());
-  }
-
-  @Test
   public void testToString() {
     assertEquals("Name: First Last Employee Number: 3001", k.toString());
   }

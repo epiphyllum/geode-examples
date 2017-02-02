@@ -33,7 +33,6 @@ public class Producer extends BaseClient {
 
     EmployeeKey k1 = new EmployeeKey("Alex Able", 160);
     EmployeeData d1 = new EmployeeData(k1, 70000, 40);
-    logger.info("About to try put on k1,d1 ");
     try {
       getRegion().put(k1, d1);
     } catch (ServerOperationException e) {
@@ -43,12 +42,10 @@ public class Producer extends BaseClient {
 
     EmployeeKey k2 = new EmployeeKey("Bertie Bell", 170);
     EmployeeData d2 = new EmployeeData(k2, 72000, 40);
-    logger.info("About to try put on k2,d2 ");
     getRegion().put(k2, d2);
 
     EmployeeKey k3 = new EmployeeKey("Chris Call", 180);
     EmployeeData d3 = new EmployeeData(k3, 68000, 40);
-    logger.info("About to try put on k3,d3 ");
     getRegion().put(k3, d3);
 
     logger.info("Inserted 3 entries.");

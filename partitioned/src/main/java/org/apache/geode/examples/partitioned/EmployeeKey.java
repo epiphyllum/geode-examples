@@ -14,11 +14,14 @@
  */
 package org.apache.geode.examples.partitioned;
 
+import java.util.Objects;
 import java.util.logging.Logger;
 import java.io.Serializable;
 import org.apache.geode.cache.client.ClientCache;
 
 public class EmployeeKey implements Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   static final Logger logger = Logger.getAnonymousLogger();
   private String name;
@@ -39,17 +42,28 @@ public class EmployeeKey implements Serializable {
     return (emplNumber);
   }
 
-  public boolean equals(EmployeeKey key) {
-    if (this.name.equals(key.getName()) && this.emplNumber == key.getEmplNumber()) {
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
       return true;
     }
-    return false;
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    EmployeeKey that = (EmployeeKey) o;
+
+    if (emplNumber != that.emplNumber) {
+      return false;
+    }
+    return name.equals(that.name);
   }
 
+  @Override
   public int hashCode() {
-    int nameHashValue = this.name.hashCode();
-    int numHashValue = this.emplNumber;
-    return (nameHashValue + numHashValue);
+    int result = name.hashCode();
+    result = 31 * result + emplNumber;
+    return result;
   }
 
   public String toString() {
