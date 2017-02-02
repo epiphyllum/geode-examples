@@ -35,7 +35,7 @@ public abstract class BaseClient {
   private final String locatorHost = System.getProperty("GEODE_LOCATOR_HOST", "localhost");
   private final int locatorPort = Integer.getInteger("GEODE_LOCATOR_PORT", 10334);
   protected static final String REGION_NAME = "EmployeeRegion";
-  static final int NUM_ENTRIES = 3;
+  static final int NUM_ENTRIES = 10;
 
   public BaseClient() {
     this.clientCache = getClientCache();

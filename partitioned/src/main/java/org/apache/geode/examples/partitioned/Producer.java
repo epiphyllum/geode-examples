@@ -15,6 +15,7 @@
 package org.apache.geode.examples.partitioned;
 
 import org.apache.geode.cache.client.ClientCache;
+import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ServerOperationException;
 
 public class Producer extends BaseClient {
@@ -31,10 +32,11 @@ public class Producer extends BaseClient {
 
   public void populateRegion() {
 
+    Region r = getRegion();
     EmployeeKey k1 = new EmployeeKey("Alex Able", 160);
     EmployeeData d1 = new EmployeeData(k1, 70000, 40);
     try {
-      getRegion().put(k1, d1);
+      r.put(k1, d1);
     } catch (ServerOperationException e) {
       logger.info("ServerOperationException " + e.getMessage());
       logger.info("ServerOperationException " + e.getCause());
@@ -42,12 +44,40 @@ public class Producer extends BaseClient {
 
     EmployeeKey k2 = new EmployeeKey("Bertie Bell", 170);
     EmployeeData d2 = new EmployeeData(k2, 72000, 40);
-    getRegion().put(k2, d2);
+    r.put(k2, d2);
 
-    EmployeeKey k3 = new EmployeeKey("Chris Call", 180);
+    EmployeeKey k3 = new EmployeeKey("Kris Call", 180);
     EmployeeData d3 = new EmployeeData(k3, 68000, 40);
-    getRegion().put(k3, d3);
+    r.put(k3, d3);
 
-    logger.info("Inserted 3 entries.");
+    EmployeeKey k4 = new EmployeeKey("Dale Driver", 190);
+    EmployeeData d4 = new EmployeeData(k4, 81500, 36);
+    r.put(k4, d4);
+
+    EmployeeKey k5 = new EmployeeKey("Frankie Forth", 201);
+    EmployeeData d5 = new EmployeeData(k5, 45000, 40);
+    r.put(k5, d5);
+
+    EmployeeKey k6 = new EmployeeKey("Jamie Jive", 220);
+    EmployeeData d6 = new EmployeeData(k6, 56500, 40);
+    r.put(k6, d6);
+
+    EmployeeKey k7 = new EmployeeKey("Morgan Minnow", 230);
+    EmployeeData d7 = new EmployeeData(k7, 65000, 36);
+    r.put(k7, d7);
+
+    EmployeeKey k8 = new EmployeeKey("Pat Puts", 240);
+    EmployeeData d8 = new EmployeeData(k8, 67000, 40);
+    r.put(k8, d8);
+
+    EmployeeKey k9 = new EmployeeKey("Ricky Reliable", 2500);
+    EmployeeData d9 = new EmployeeData(k9, 71000, 40);
+    r.put(k9, d9);
+
+    EmployeeKey k10 = new EmployeeKey("Taylor Tack", 260);
+    EmployeeData d10 = new EmployeeData(k10, 70000, 40);
+    r.put(k10, d10);
+
+    logger.info("Inserted 10 entries.");
   }
 }
