@@ -19,44 +19,14 @@ import java.util.logging.Logger;
 import java.io.Serializable;
 import org.apache.geode.cache.client.ClientCache;
 
-public class BadEmployeeKey implements Serializable {
+public class BadEmployeeKey extends EmployeeKey {
 
   private static final long serialVersionUID = 1L;
-
-  static final Logger logger = Logger.getAnonymousLogger();
-  private String name;
-  private int emplNumber;
 
   public BadEmployeeKey() {}
 
   public BadEmployeeKey(String n, int en) {
-    this.name = n;
-    this.emplNumber = en;
-  }
-
-  public String getName() {
-    return (name);
-  }
-
-  public int getEmplNumber() {
-    return (emplNumber);
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-
-    BadEmployeeKey that = (BadEmployeeKey) o;
-
-    if (emplNumber != that.emplNumber) {
-      return false;
-    }
-    return name.equals(that.name);
+    super(n, en);
   }
 
   /*
@@ -69,10 +39,6 @@ public class BadEmployeeKey implements Serializable {
   @Override
   public int hashCode() {
     return 1;
-  }
-
-  public String toString() {
-    return ("Name: " + this.name + " Employee Number: " + this.emplNumber);
   }
 
 }

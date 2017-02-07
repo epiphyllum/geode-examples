@@ -41,17 +41,12 @@ public class ConsumerTest {
 
   @Before
   public void setup() {
-    when(region.getName()).thenReturn(Consumer.REGION_NAME);
+    when(region.getName()).thenReturn(Consumer.REGION1_NAME);
     when(keys.size()).thenReturn(Consumer.NUM_ENTRIES);
     when(region.keySetOnServer()).thenReturn(keys);
     when(clientCache.getRegion(any())).thenReturn(region);
     consumer = new Consumer(clientCache);
-    consumer.setRegion(region);
-  }
-
-  @Test
-  public void numberOfEntriesOnServerShouldMatchConsumerEntries() throws Exception {
-    assertEquals(consumer.NUM_ENTRIES, consumer.countEntriesOnServer());
+    consumer.setRegion1(region);
   }
 
   @Test
@@ -59,12 +54,5 @@ public class ConsumerTest {
     assertTrue(consumer.NUM_ENTRIES > 0);
   }
 
-  @Test
-  public void countingEntriesWithoutConnectionShouldThrowNoAvailableLocatorsException()
-      throws Exception {
-    consumer = new Consumer();
-    expectedException.expect(NoAvailableLocatorsException.class);
-    assertEquals(consumer.NUM_ENTRIES, consumer.countEntriesOnServer());
-  }
 
 }

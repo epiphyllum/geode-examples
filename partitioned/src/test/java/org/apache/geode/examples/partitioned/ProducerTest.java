@@ -40,7 +40,7 @@ public class ProducerTest {
 
   @Before
   public void setup() throws Exception {
-    when(region.getName()).thenReturn(Producer.REGION_NAME);
+    when(region.getName()).thenReturn(Producer.REGION1_NAME);
     when(region.keySetOnServer()).thenReturn(keys);
     when(clientCache.getRegion(any())).thenReturn(region);
   }
@@ -48,7 +48,7 @@ public class ProducerTest {
   @Test
   public void populateRegionShouldReturnCorrectNumberOfEntries() throws Exception {
     producer = new Producer(clientCache);
-    producer.setRegion(region);
+    producer.setRegion1(region);
 
     producer.populateRegion();
     verify(region, times(producer.NUM_ENTRIES)).put(any(), any());

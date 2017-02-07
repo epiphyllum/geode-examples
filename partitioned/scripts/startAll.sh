@@ -36,8 +36,11 @@ do
  gfsh start server --locators=localhost[${GEODE_LOCATOR_PORT}] --name=server$N  --server-port=0 --mcast-port=0 --classpath=${PWD}/build/libs/partitioned-0.1.0-SNAPSHOT.jar
 done
 
-# create a region using GFSH
+# create 2 regions with the same data using GFSH, one that works well,
+#  good keys, and the other that implements a bad hashCode on the key
 gfsh -e "connect --locator=localhost[${GEODE_LOCATOR_PORT}]" -e "create region --name=EmployeeRegion --type=PARTITION"
+
+gfsh -e "connect --locator=localhost[${GEODE_LOCATOR_PORT}]" -e "create region --name=BadEmployeeRegion --type=PARTITION"
 
 gfsh -e "connect --locator=localhost[${GEODE_LOCATOR_PORT}]" -e "list members"
 

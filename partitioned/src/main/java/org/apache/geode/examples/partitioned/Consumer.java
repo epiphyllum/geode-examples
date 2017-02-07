@@ -22,8 +22,6 @@ public class Consumer extends BaseClient {
 
   public static void main(String[] args) {
     Consumer c = new Consumer();
-    int numEntries = c.countEntriesOnServer();
-    logger.info(String.format("%d entries in the region on the server(s).", numEntries));
     c.printRegionContents();
   }
 
@@ -33,20 +31,32 @@ public class Consumer extends BaseClient {
     this.clientCache = clientCache;
   }
 
-  public int countEntriesOnServer() {
-    int size = this.getRegion().keySetOnServer().size();
-    return size;
-  }
 
   public void printRegionContents() {
-    Region myRegion = this.getRegion();
-    Set<EmployeeKey> setOfKeys = myRegion.keySetOnServer();
     /*
-     * for each key in setOfKeys print the entry
+     * Print EmployeeRegion size and contents
      */
-    logger.info("Region contents:");
-    for (EmployeeKey key : setOfKeys) {
-      logger.info(myRegion.get(key).toString());
+    Region r1 = this.getRegion1();
+    Set<EmployeeKey> setOfKeys1 = r1.keySetOnServer();
+    logger.info(setOfKeys1.size() + " entries in EmployeeRegion on the server(s).");
+    if (setOfKeys1.size() > 0) {
+      logger.info("Contents of EmployeeRegion:");
+      for (EmployeeKey key : setOfKeys1) {
+        logger.info(r1.get(key).toString());
+      }
+    }
+
+    /*
+     * Print BadEmployeeRegion size and contents
+     */
+    Region r2 = this.getRegion2();
+    Set<EmployeeKey> setOfKeys2 = r2.keySetOnServer();
+    logger.info(setOfKeys2.size() + " entries in BadEmployeeRegion on the server(s).");
+    if (setOfKeys2.size() > 0) {
+      logger.info("Contents of BadEmployeeRegion:");
+      for (EmployeeKey key : setOfKeys2) {
+        logger.info(r2.get(key).toString());
+      }
     }
   }
 

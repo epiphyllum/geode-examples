@@ -27,27 +27,42 @@ public abstract class BaseClient {
   static final Logger logger = Logger.getAnonymousLogger();
   protected ClientCache clientCache;
 
-  protected void setRegion(Region region) {
-    this.region = region;
+  protected void setRegion1(Region region) {
+    this.region1 = region;
   }
 
-  private Region region;
+  protected void setRegion2(Region region) {
+    this.region2 = region;
+  }
+
+  private Region region1;
+  private Region region2;
   private final String locatorHost = System.getProperty("GEODE_LOCATOR_HOST", "localhost");
   private final int locatorPort = Integer.getInteger("GEODE_LOCATOR_PORT", 10334);
-  protected static final String REGION_NAME = "EmployeeRegion";
+  protected static final String REGION1_NAME = "EmployeeRegion";
+  protected static final String REGION2_NAME = "BadEmployeeRegion";
   static final int NUM_ENTRIES = 10;
 
   public BaseClient() {
     this.clientCache = getClientCache();
   }
 
-  protected Region getRegion() {
-    if (region == null) {
-      region = getClientCache()
+  protected Region getRegion1() {
+    if (region1 == null) {
+      region1 = getClientCache()
           .<EmployeeKey, EmployeeData>createClientRegionFactory(ClientRegionShortcut.PROXY)
-          .create(REGION_NAME);
+          .create(REGION1_NAME);
     }
-    return region;
+    return (region1);
+  }
+
+  protected Region getRegion2() {
+    if (region2 == null) {
+      region2 = getClientCache()
+          .<EmployeeKey, EmployeeData>createClientRegionFactory(ClientRegionShortcut.PROXY)
+          .create(REGION2_NAME);
+    }
+    return (region2);
   }
 
   protected ClientCache getClientCache() {

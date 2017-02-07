@@ -21,7 +21,10 @@ import org.apache.geode.cache.client.ServerOperationException;
 public class Producer extends BaseClient {
 
   public static void main(String[] args) {
-    new Producer().populateRegion();
+
+    Producer p = new Producer();
+    p.populateRegion();
+    p.populateBadRegion();
   }
 
   public Producer() {}
@@ -32,7 +35,7 @@ public class Producer extends BaseClient {
 
   public void populateRegion() {
 
-    Region r = getRegion();
+    Region r = getRegion1();
     EmployeeKey k1 = new EmployeeKey("Alex Able", 160);
     EmployeeData d1 = new EmployeeData(k1, 70000, 40);
     try {
@@ -78,6 +81,57 @@ public class Producer extends BaseClient {
     EmployeeData d10 = new EmployeeData(k10, 70000, 40);
     r.put(k10, d10);
 
-    logger.info("Inserted 10 entries.");
+    logger.info("Inserted 10 entries in EmployeeRegion.");
+  }
+
+  public void populateBadRegion() {
+
+    Region r = getRegion2();
+    BadEmployeeKey k1 = new BadEmployeeKey("Alex Able", 160);
+    EmployeeData d1 = new EmployeeData(k1, 70000, 40);
+    try {
+      r.put(k1, d1);
+    } catch (ServerOperationException e) {
+      logger.info("ServerOperationException " + e.getMessage());
+      logger.info("ServerOperationException " + e.getCause());
+    }
+
+    BadEmployeeKey k2 = new BadEmployeeKey("Bertie Bell", 170);
+    EmployeeData d2 = new EmployeeData(k2, 72000, 40);
+    r.put(k2, d2);
+
+    BadEmployeeKey k3 = new BadEmployeeKey("Kris Call", 180);
+    EmployeeData d3 = new EmployeeData(k3, 68000, 40);
+    r.put(k3, d3);
+
+    BadEmployeeKey k4 = new BadEmployeeKey("Dale Driver", 190);
+    EmployeeData d4 = new EmployeeData(k4, 81500, 36);
+    r.put(k4, d4);
+
+    BadEmployeeKey k5 = new BadEmployeeKey("Frankie Forth", 201);
+    EmployeeData d5 = new EmployeeData(k5, 45000, 40);
+    r.put(k5, d5);
+
+    BadEmployeeKey k6 = new BadEmployeeKey("Jamie Jive", 220);
+    EmployeeData d6 = new EmployeeData(k6, 56500, 40);
+    r.put(k6, d6);
+
+    BadEmployeeKey k7 = new BadEmployeeKey("Morgan Minnow", 230);
+    EmployeeData d7 = new EmployeeData(k7, 65000, 36);
+    r.put(k7, d7);
+
+    BadEmployeeKey k8 = new BadEmployeeKey("Pat Puts", 240);
+    EmployeeData d8 = new EmployeeData(k8, 67000, 40);
+    r.put(k8, d8);
+
+    BadEmployeeKey k9 = new BadEmployeeKey("Ricky Reliable", 2500);
+    EmployeeData d9 = new EmployeeData(k9, 71000, 40);
+    r.put(k9, d9);
+
+    BadEmployeeKey k10 = new BadEmployeeKey("Taylor Tack", 260);
+    EmployeeData d10 = new EmployeeData(k10, 70000, 40);
+    r.put(k10, d10);
+
+    logger.info("Inserted 10 entries in BadEmployeeRegion.");
   }
 }
