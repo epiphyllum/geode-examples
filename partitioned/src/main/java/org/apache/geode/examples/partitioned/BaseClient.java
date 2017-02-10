@@ -59,7 +59,7 @@ public abstract class BaseClient {
   protected Region getRegion2() {
     if (region2 == null) {
       region2 = getClientCache()
-          .<EmployeeKey, EmployeeData>createClientRegionFactory(ClientRegionShortcut.PROXY)
+          .<BadEmployeeKey, EmployeeData>createClientRegionFactory(ClientRegionShortcut.PROXY)
           .create(REGION2_NAME);
     }
     return (region2);
