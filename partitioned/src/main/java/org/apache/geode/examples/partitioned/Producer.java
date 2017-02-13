@@ -16,7 +16,6 @@ package org.apache.geode.examples.partitioned;
 
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.Region;
-import org.apache.geode.cache.client.ServerOperationException;
 
 public class Producer extends BaseClient {
 
@@ -33,17 +32,13 @@ public class Producer extends BaseClient {
     this.clientCache = clientCache;
   }
 
+  /* Put 10 entries into the region with the quality hashing function. */
   public void populateRegion() {
 
     Region r = getRegion1();
     EmployeeKey k1 = new EmployeeKey("Alex Able", 160);
     EmployeeData d1 = new EmployeeData(k1, 70000, 40);
-    try {
-      r.put(k1, d1);
-    } catch (ServerOperationException e) {
-      logger.info("ServerOperationException " + e.getMessage());
-      logger.info("ServerOperationException " + e.getCause());
-    }
+    r.put(k1, d1);
 
     EmployeeKey k2 = new EmployeeKey("Bertie Bell", 170);
     EmployeeData d2 = new EmployeeData(k2, 72000, 40);
@@ -84,17 +79,16 @@ public class Producer extends BaseClient {
     logger.info("Inserted 10 entries in EmployeeRegion.");
   }
 
+  /*
+   * Put 10 entries into the region with the bad hashing function. The entries are the same as those
+   * put into the region with the quality hashing function.
+   */
   public void populateBadRegion() {
 
     Region r = getRegion2();
     BadEmployeeKey k1 = new BadEmployeeKey("Alex Able", 160);
     EmployeeData d1 = new EmployeeData(k1, 70000, 40);
-    try {
-      r.put(k1, d1);
-    } catch (ServerOperationException e) {
-      logger.info("ServerOperationException " + e.getMessage());
-      logger.info("ServerOperationException " + e.getCause());
-    }
+    r.put(k1, d1);
 
     BadEmployeeKey k2 = new BadEmployeeKey("Bertie Bell", 170);
     EmployeeData d2 = new EmployeeData(k2, 72000, 40);

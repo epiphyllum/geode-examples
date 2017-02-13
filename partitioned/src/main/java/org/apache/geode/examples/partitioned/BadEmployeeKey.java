@@ -14,10 +14,6 @@
  */
 package org.apache.geode.examples.partitioned;
 
-import java.util.Objects;
-import java.util.logging.Logger;
-import java.io.Serializable;
-import org.apache.geode.cache.client.ClientCache;
 
 public class BadEmployeeKey extends EmployeeKey {
 

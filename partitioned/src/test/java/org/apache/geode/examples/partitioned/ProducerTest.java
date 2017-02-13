@@ -19,6 +19,9 @@ import static org.mockito.Mockito.*;
 
 import java.util.Set;
 
+import org.apache.geode.cache.client.ClientRegionFactory;
+import org.apache.geode.cache.client.ClientRegionShortcut;
+import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -35,30 +38,39 @@ public class ProducerTest {
 
   private Producer producer;
   private ClientCache clientCache = mock(ClientCache.class);
-  private Region region = mock(Region.class);
+  private Region<EmployeeKey, EmployeeData> region1 = mock(Region.class);
+  private Region<BadEmployeeKey, EmployeeData> region2 = mock(Region.class);
+  private ClientRegionFactory clientRegionFactory = mock(ClientRegionFactory.class);
   private Set keys = mock(Set.class);
 
+
   @Before
-  public void setup() throws Exception {
-    when(region.getName()).thenReturn(Producer.REGION1_NAME);
-    when(region.keySetOnServer()).thenReturn(keys);
-    when(clientCache.getRegion(any())).thenReturn(region);
+  public void setup() {
+    when(region1.getName()).thenReturn(Producer.REGION1_NAME);
+    when(region2.getName()).thenReturn(Producer.REGION2_NAME);
+    when(keys.size()).thenReturn(Producer.NUM_ENTRIES);
+    when(clientCache.createClientRegionFactory(ClientRegionShortcut.PROXY))
+        .thenReturn(clientRegionFactory);
+    when(clientRegionFactory.create(Consumer.REGION1_NAME)).thenReturn(region1);
+    when(clientRegionFactory.create(Consumer.REGION2_NAME)).thenReturn(region2);
+
+  }
+
+
+  @Test
+  public void testPopulateRegion() {
+    producer = new Producer(clientCache);
+    producer.populateRegion();
+    verify(region1, times(10)).put(any(), any());
+
   }
 
   @Test
-  public void populateRegionShouldReturnCorrectNumberOfEntries() throws Exception {
+  public void testPopulateBadRegion() {
     producer = new Producer(clientCache);
-    producer.setRegion1(region);
+    producer.populateBadRegion();
+    verify(region2, times(10)).put(any(), any());
 
-    producer.populateRegion();
-    verify(region, times(producer.NUM_ENTRIES)).put(any(), any());
-  }
-
-  @Test
-  public void populateWhenRegionDoesNotExistShouldThrowNullPointer() throws Exception {
-    producer = new Producer(clientCache);
-    expectedException.expect(NullPointerException.class);
-    producer.populateRegion();
   }
 
   @After

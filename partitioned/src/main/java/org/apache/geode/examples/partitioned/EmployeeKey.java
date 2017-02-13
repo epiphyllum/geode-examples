@@ -14,16 +14,12 @@
  */
 package org.apache.geode.examples.partitioned;
 
-import java.util.Objects;
-import java.util.logging.Logger;
 import java.io.Serializable;
-import org.apache.geode.cache.client.ClientCache;
 
 public class EmployeeKey implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  static final Logger logger = Logger.getAnonymousLogger();
   private String name;
   private int emplNumber;
 

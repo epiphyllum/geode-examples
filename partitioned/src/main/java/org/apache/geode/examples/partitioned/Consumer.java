@@ -33,9 +33,7 @@ public class Consumer extends BaseClient {
 
 
   public void printRegionContents() {
-    /*
-     * Print EmployeeRegion size and contents
-     */
+    /* Print EmployeeRegion size and contents */
     Region r1 = this.getRegion1();
     Set<EmployeeKey> setOfKeys1 = r1.keySetOnServer();
     logger.info(setOfKeys1.size() + " entries in EmployeeRegion on the server(s).");
@@ -46,9 +44,7 @@ public class Consumer extends BaseClient {
       }
     }
 
-    /*
-     * Print BadEmployeeRegion size and contents
-     */
+    /* Print BadEmployeeRegion size and contents */
     Region r2 = this.getRegion2();
     Set<EmployeeKey> setOfKeys2 = r2.keySetOnServer();
     logger.info(setOfKeys2.size() + " entries in BadEmployeeRegion on the server(s).");

@@ -17,7 +17,7 @@ limitations under the License.
 
 # Geode partitioned region example
 
-This basic example demonstrates the basic properties of partitioned regions: 
+This example demonstrates the basic properties of partitioned regions: 
 
 - Data entries are distributed across all servers that host a region.
 The distribution is like database sharding, except that the distribution
@@ -50,113 +50,143 @@ This example is a simple demonstration of some basic Geode APIs,
 as well as providing ```gfsh``` command examples.
 
 ## Steps
-1. From the ```geode-examples/partitioned``` directory,
-build the jar (with the ```EmployeeKey```, ```BadEmployeeKey```, 
+1. Set directory ```geode-examples/partitioned``` to be the
+current working directory.
+Each step in this example specifies paths relative to that directory.
+
+1. Build the jar (with the ```EmployeeKey```, ```BadEmployeeKey```, 
 and ```EmployeeData``` classes):
 
-        $   ../gradlew build
+    ```
+    $   ../gradlew build
+    ```
+1. Run a script that starts a locator and two servers.
+The built JAR will be placed onto the classpath when the script 
+starts the servers:
 
-1. From the ```geode-examples/partitioned``` directory,
-run a script that starts a locator and two servers.
-The JAR built in the first step is placed
-onto the classpath when starting the servers:
-
-        $ scripts/startAll.sh
-
+    ```
+    $ scripts/startAll.sh
+    ```
     Each of the servers hosts both partitioned regions.
-1. Run the producer to put the same 10 entries into both the
-```EmployeeRegion``` and the ```BadEmployeeRegion```:
+    
+1. Run the producer to put the same 10 entries into both the ```EmployeeRegion``` and the ```BadEmployeeRegion```:
 
-        $ ../gradlew run -Pmain=Producer
-        ...
-        ... 
-        INFO: Inserted 10 entries in EmployeeRegion.
-        INFO: Inserted 10 entries in BadEmployeeRegion.
+    ```
+    $ ../gradlew run -Pmain=Producer
+    ...
+    ... 
+    INFO: Inserted 10 entries in EmployeeRegion.
+    INFO: Inserted 10 entries in BadEmployeeRegion.
+    ```
+
     To see contents of the region keys, use a ```gfsh``` query:
- 
-        $ $GEODE_HOME/bin/gfsh
-        ...
-        gfsh>connect
-        gfsh>query --query="select e.key from /EmployeeRegion.entries e"
+
+    ```
+    $ $GEODE_HOME/bin/gfsh
+    ...
+    gfsh>connect
+    gfsh>query --query="select e.key from /EmployeeRegion.entries e"
+    ```
+
     Or, to see contents of the region values, use a ```gfsh``` query:
 
-        gfsh>query --query="select * from /EmployeeRegion"
-1. Run the consumer to get and log all 10 entries in each region, 
-the```EmployeeRegion``` and the ```BadEmployeeRegion```:
+    ```
+    gfsh>query --query="select * from /EmployeeRegion"
+    ```
 
-        $ ../gradlew run -Pmain=Consumer
+1. Run the consumer to get and print all 10 entries in each region, the
+```EmployeeRegion``` and the ```BadEmployeeRegion```:
+
+    ```
+    $ ../gradlew run -Pmain=Consumer
+    ```
 
     Note that the quantity of entries may also be observed with ```gfsh```:
  
-        $ $GEODE_HOME/bin/gfsh
-        ...
-        gfsh>connect
-        gfsh>describe region --name=EmployeeRegion
-        ..........................................................
-        Name            : EmployeeRegion
-        Data Policy     : partition
-        Hosting Members : server2
-                          server1
+    ```
+    $ $GEODE_HOME/bin/gfsh
+    ...
+    gfsh>connect
+    gfsh>describe region --name=EmployeeRegion
+    ..........................................................
+    Name            : EmployeeRegion
+    Data Policy     : partition
+    Hosting Members : server2
+                      server1
 
-        Non-Default Attributes Shared By Hosting Members  
+    Non-Default Attributes Shared By Hosting Members  
 
-         Type  |    Name     | Value
-        ------ | ----------- | ---------
-        Region | size        | 10
-               | data-policy | PARTITION
+     Type  |    Name     | Value
+    ------ | ----------- | ---------
+    Region | size        | 10
+           | data-policy | PARTITION
 
-        gfsh>quit
+    gfsh>quit
+    ```
 
     As an alternative, ```gfsh``` maybe used to identify how many entries
     there are for each region on each server by looking at statistics.
 
-        gfsh>show metrics --categories=partition --region=/BadEmployeeRegion --member=server1
-
+    ```
+    gfsh>show metrics --categories=partition --region=/BadEmployeeRegion --member=server1
+    ```
     Within the output, the result for ```totalBucketSize``` identifies
     the number of entries hosted on the specified server.
     Vary the command to see both ```server1``` and ```server2```, as well as
     ```EmployeeRegion``` and ```BadEmployeeRegion```.
-
+    
     Note that for the ```BadEmployeeRegion```, one of the servers will host
     all the entries, while the other server will not have any of the entries.
     This is due to the bad hash code generated for those keys.
+
 1. Kill one of the servers:
 
-        $ $GEODE_HOME/bin/gfsh
-        ...
-        gfsh>connect
-        gfsh>stop server --name=server1
-        gfsh>quit
+    ```
+    $ $GEODE_HOME/bin/gfsh
+    ...
+    gfsh>connect
+    gfsh>stop server --name=server1
+    gfsh>quit
+    ```
 
-5. Run the consumer a second time, and notice that only approximately half of
-the entries of the ```EmployeeRegion``` are still available: 
+1. Run the consumer a second time, and notice that approximately half of
+the entries of the ```EmployeeRegion``` are still available on the remaining server.
+Those hosted by the server that was stopped were lost.
+And, depending on which server hosted all the `BadEmployeeRegion` entries and which server was stopped, there will either be 0 entries or all 10 entries on the remaining server.
 
-        $ ../gradlew run -Pmain=Consumer
-        ...
-        ...
-        INFO: Done. 6 entries available on the server(s).
-
+    ```
+    $ ../gradlew run -Pmain=Consumer
+    ...
+    ...
+    INFO: 6 entries in EmployeeRegion on the server(s).
+    ...
+    INFO: 0 entries in BadEmployeeRegion on the server(s).
+    ```
     Again, this observation may also be made with ```gfsh```:
 
-        $ $GEODE_HOME/bin/gfsh
-        ...
-        gfsh>connect
-        gfsh>describe region --name=EmployeeRegion
-        ..........................................................
-        Name            : EmployeeRegion
-        Data Policy     : partition
-        Hosting Members : server2
+    ```
+    $ $GEODE_HOME/bin/gfsh
+    ...
+    gfsh>connect
+    gfsh>describe region --name=EmployeeRegion
+    ..........................................................
+    Name            : EmployeeRegion
+    Data Policy     : partition
+    Hosting Members : server2
 
-        Non-Default Attributes Shared By Hosting Members  
+    Non-Default Attributes Shared By Hosting Members  
 
-         Type  |    Name     | Value
-        ------ | ----------- | ---------
-        Region | size        | 4
-               | data-policy | PARTITION
+     Type  |    Name     | Value
+    ------ | ----------- | ---------
+    Region | size        | 4
+           | data-policy | PARTITION
 
-        gfsh>quit
+    gfsh>quit
+    ```
 
 6. Shut down the system:
 
-        $ scripts/stopAll.sh
+    ```
+    $ scripts/stopAll.sh
+    ```
 
