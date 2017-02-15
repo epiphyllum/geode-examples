@@ -22,8 +22,19 @@ public class Producer extends BaseClient {
   public static void main(String[] args) {
 
     Producer p = new Producer();
-    p.populateRegion();
-    p.populateBadRegion();
+    if (0 == args.length) {
+      throw new RuntimeException("Expected argument specifying region name.");
+    } else {
+      if (args[0].equals("EmployeeRegion")) {
+        p.populateRegion();
+      } else {
+        if (args[0].equals("BadEmployeeRegion")) {
+          p.populateBadRegion();
+        } else {
+          throw new RuntimeException("Unrecognized region name in argument specification.");
+        }
+      }
+    }
   }
 
   public Producer() {}

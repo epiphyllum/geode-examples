@@ -17,39 +17,39 @@ limitations under the License.
 
 # Geode partitioned region example
 
-This example demonstrates the basic properties of partitioned regions: 
+This example demonstrates the basic property of partitioning, as well
+as what can go wrong with partitioned regions. 
+The example is presented in two parts.
+The first part shows partitioning, and the second part demonstrates
+what can go wrong with a flawed implementation.
 
-- Data entries are distributed across all servers that host a region.
+The basic property of partitioning is that data entries are distributed 
+across all servers that host a region.
 The distribution is like database sharding, except that the distribution
 occurs automatically. It is also similar to data striping on disks,
 except that the distribution is not based on hardware.
 
-- Hashing distributes entries among buckets that reside on servers.
-A good hash code is important in order to spread the entries among buckets.
-
 In this example,
 two servers host two partitioned regions. 
-There is no redundancy, so that the basic properties of partitioning
+There is no redundancy, so that the basic property of partitioning
 may be observed.
-The Producer code puts the same 10 entries into each of the two
-partitioned regions.
-The Consumer gets and prints the entries from each of the two regions.
-Due to partitioning,
-the entries are distributed among the two servers hosting the region.
+The Producer code puts the 10 entries into one of the two
+regions.
+The Consumer gets and prints the entries from one of the two regions.
+The regions are partitioned,
+so the entries are distributed among the two servers hosting the region.
 Since there is no redundancy of the data within the region,
 when one of the servers goes away,
 the entries hosted within that server are also gone.
 
 The two regions are the same, except for the hash code implementation.
-The ```EmployeeRegion``` has a good hashing function,
-and the ```BadEmployeeRegion``` has a pointedly poor hash code implementation.
-The hash code is so bad that all entries in the
-```BadEmployeeRegion``` end up in the same bucket.
+Part 1 of this example shows partitioning, and uses only the region
+called `EmployeeRegion`.
+Part 2 of this example shows what can go wrong with a partitioned
+region if a bad hashing function is implemented for the region keys.
+It uses only the region called `BadEmployeeRegion`.
 
-This example is a simple demonstration of some basic Geode APIs,
-as well as providing ```gfsh``` command examples.
-
-## Steps
+## Part 1: Partitioning
 1. Set directory ```geode-examples/partitioned``` to be the
 current working directory.
 Each step in this example specifies paths relative to that directory.
@@ -69,14 +69,14 @@ starts the servers:
     ```
     Each of the servers hosts both partitioned regions.
     
-1. Run the producer to put the same 10 entries into both the ```EmployeeRegion``` and the ```BadEmployeeRegion```:
+1. Run the producer to put 10 entries into the ```EmployeeRegion```.
+The argument specification identifies the region.
 
     ```
-    $ ../gradlew run -Pmain=Producer
+    $ ../gradlew run -Pmain=Producer -Pargs=EmployeeRegion
     ...
     ... 
     INFO: Inserted 10 entries in EmployeeRegion.
-    INFO: Inserted 10 entries in BadEmployeeRegion.
     ```
 
     To see contents of the region keys, use a ```gfsh``` query:
@@ -190,3 +190,13 @@ And, depending on which server hosted all the `BadEmployeeRegion` entries and wh
     $ scripts/stopAll.sh
     ```
 
+## Part 2: What Can Go Wrong
+
+Hashing distributes entries among buckets that reside on servers.
+A good hash code is important in order to spread the entries among buckets.
+
+While the ```EmployeeRegion``` used in Part 1 of this example
+has a good hashing function,
+the ```BadEmployeeRegion``` has a pointedly poor hash code implementation.
+The hash code is so bad that all entries in the
+```BadEmployeeRegion``` end up in the same bucket.
